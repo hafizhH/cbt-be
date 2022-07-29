@@ -9,7 +9,7 @@ const passportInit = () => {
   passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: 'http://localhost:3001/auth/google/callback'
+    callbackURL: `${process.env.CLIENT_URL}/auth/google/callback`
   }, (accessToken, refreshToken, profile, cb) => {
     //console.log(profile)
     Users.findOne({ googleId: profile.id }, (err, user) => {
@@ -51,7 +51,7 @@ const authVerify = ({ verifiedNotRequired = false }) => {
   return (req, res, next) => {
     const token = req.cookies.token
     if (!token)
-      return res.status(401).redirect(process.env.CLIENT_URL + '/signin')
+      return res.status(401).redirect(process.env.CLIENT_URL + '/401')
     Sessions.findOne({ token: token })
     .populate('user')
     .then((session) => {
@@ -59,7 +59,7 @@ const authVerify = ({ verifiedNotRequired = false }) => {
         res.locals.session = session
         next()
       } else {
-        return res.status(401).redirect(process.env.CLIENT_URL + '/signin')
+        return res.status(401).redirect(process.env.CLIENT_URL + '/401')
         //return res.status(401).json({ message: 'Unauthorized access, please login again' })
       }
     }).catch(err => {
