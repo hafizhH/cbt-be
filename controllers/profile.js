@@ -27,18 +27,16 @@ const getProfile = (req, res) => {
 }
 
 const updateProfile = (req, res) => {
-  const user = res.locals.user
+  const user = res.locals.session.user
   let newProfile = {
-    googleId: req.body.googleId,
     name: req.body.name,
-    email: req.body.email,
     photoUrl: res.locals.uploadUrl['photo'].url,
     province: req.body.province,
     regency: req.body.regency,
     school: req.body.school,
     paymentReceiptImgUrl: res.locals.uploadUrl['paymentReceiptImg'].url
   }
-  newProfile.keys().forEach(key => {
+  Object.keys(newProfile).forEach(key => {
     if (!newProfile[key])
       delete newProfile[key]
   })
