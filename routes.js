@@ -1,15 +1,15 @@
 const router = require('express').Router()
 const { router: authRoute } = require('./routes/auth')
 const { router: profileRoute } = require('./routes/profile')
-const { router: mainRoute } = require('./routes/main')
+const { router: examRoute } = require('./routes/exam')
 const { router: miscRoute } = require('./routes/misc')
 const { authVerify } = require('./controllers/auth')
 
 router.use('/auth', authRoute)
 
-router.use('/profile', authVerify({ verifiedNotRequired: true }), profileRoute)
+router.use('/profile', authVerify(), profileRoute)
 
-router.use('/main', mainRoute)
+router.use('/exam', examRoute)
 
 router.use('/misc', miscRoute)
 

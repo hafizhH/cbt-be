@@ -27,7 +27,7 @@ const passportInit = () => {
   }))
 }
 
-const authSignIn = (req, res) => {
+const authSignIn = (req, res, next) => {
   const token = uuidv4()
   Users.findOne({ googleId: req.user.googleId })
   .then(user => {
@@ -37,17 +37,17 @@ const authSignIn = (req, res) => {
         res.cookie('token', token, { maxAge: 10*60*60*1000, httpOnly: true })
         return res.redirect('/dashboard')
       }).catch(err => {
-        return res.status(500).json({ message: err })
+        next(err)
       })
     } else {
-      return res.status(500).json({ message: 'Created user data do not exist in database' })
+      next(new Error('Created user data do not exist in database'))
     }
   }).catch(err => {
-    return res.status(500).json({ message: err })
+    next(err)
   })
 }
 
-const authVerify = ({ verifiedNotRequired = false }) => {
+const authVerify = () => {
   return (req, res, next) => {
     const token = req.cookies.token
     if (!token)
@@ -55,7 +55,7 @@ const authVerify = ({ verifiedNotRequired = false }) => {
     Sessions.findOne({ token: token })
     .populate('user')
     .then((session) => {
-      if (session && (verifiedNotRequired || (!verifiedNotRequired && session.user.verified))) {
+      if (session) {
         res.locals.session = session
         next()
       } else {
@@ -63,7 +63,7 @@ const authVerify = ({ verifiedNotRequired = false }) => {
         //return res.status(401).json({ message: 'Unauthorized access, please login again' })
       }
     }).catch(err => {
-      return res.status(500).json({ message: err.stack })
+      next(err)
     })
   }
 }

@@ -10,14 +10,15 @@ const uploadImage = (fields) => {
   return (req, res, next) => {
     store(req, res, (err) => {
       if (err)
-        return next(err)
-      //console.log(req.files)
+        next(err)
       res.locals.uploadUrl = {}
       fields.forEach(field => {
         res.locals.uploadUrl[field.name] = {}
       })
-      if (!req.files)
-        return next()
+      //console.log(req.files)
+      if (!req.files || Object.keys(req.files).length === 0) {
+        next()
+      }
       Object.keys(req.files).forEach((field, index) => {
         try {
           let formData = new FormData()

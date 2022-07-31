@@ -16,6 +16,6 @@ router.get('/google/signin', passport.authenticate('google', { scope: ['profile'
 router.get('/google/callback', passport.authenticate('google', { session: false, failureRedirect: '/google/signin' }), authSignIn)
 
 //Session logout (without loggin out google account)
-router.get('/logout', authVerify({ verifiedNotRequired: true }), authLogout)
+router.get('/logout', authVerify(), authLogout)
 
 module.exports = { router }

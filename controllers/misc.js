@@ -19,4 +19,10 @@ const getRegionList = (req, res, next) => {
   }
 }
 
-module.exports = { getRegionList }
+const debuggerMid = (req, res, next) => {
+  //console.log('DEBUG')
+  //console.log(req)
+  next()
+}
+
+module.exports = { getRegionList, debuggerMid }

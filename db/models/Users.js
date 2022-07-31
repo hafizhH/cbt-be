@@ -33,16 +33,7 @@ const UserSchema = new mongoose.Schema(
     token: {
       type: 'String',
       required: false
-    },
-    paymentReceiptImgUrl: {
-      type: 'String',
-      required: false
-    },
-    verified: {
-      type: 'Boolean',
-      default: false,
-      required: false
-    },
+    }
   },
   {
     toJSON: { virtuals: true },
