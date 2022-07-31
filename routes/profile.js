@@ -9,7 +9,7 @@ const { getProfile, updateProfile, getBasicProfile } = require('../controllers/p
 //router.get('/', getProfile)
 
 //Update profile data from edit profile page
-router.post('/upload', uploadImage([{ name: 'photo', maxCount: 1 }, { name: 'paymentReceiptImg', maxCount: 1 } ]), updateProfile)
+router.post('/update', uploadImage([{ name: 'photo', maxCount: 1 }, { name: 'paymentReceiptImg', maxCount: 1 } ]), updateProfile)
 
 // router.post('/test', uploadImage([{ name: 'photo', maxCount: 1 }, { name: 'paymentReceiptImg', maxCount: 1 } ]), (req, res) => {
 //   return res.status(200).json({ data: res.locals.uploadUrl })

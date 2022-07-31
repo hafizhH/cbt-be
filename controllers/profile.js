@@ -45,9 +45,9 @@ const updateProfile = (req, res) => {
   Users.findByIdAndUpdate(user._id, newProfile)
   .then(user => {
     if (user)
-      return res.status(200).json({ message: 'User profile found!' , data: user })
+      return res.redirect(303, '/profile?r=1')
     else
-      return res.status(200).json({ message: 'Request user profile not found' })
+      return res.redirect(303, '/profile?r=0')
   }).catch(err => {
     next(err)
   })

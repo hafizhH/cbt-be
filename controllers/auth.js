@@ -35,7 +35,7 @@ const authSignIn = (req, res) => {
       Sessions.findOneAndUpdate({ user: user._id }, { token: token, user: user._id, sessionData: {} }, { new: true, upsert: true })
       .then(session => {
         res.cookie('token', token, { maxAge: 10*60*60*1000, httpOnly: true })
-        return res.redirect('/dashboard')
+        return res.redirect('/')
       }).catch(err => {
         return res.status(500).json({ message: err })
       })
