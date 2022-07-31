@@ -41,12 +41,12 @@ const updateProfile = (req, res) => {
     if (!newProfile[key])
       delete newProfile[key]
   })
-  Users.findByIdAndUpdate(user._id, newProfile)
+  Users.findByIdAndUpdate(user._id, newProfile, { new: true })
   .then(user => {
     if (user)
-      return res.status(200).json({ message: 'User profile found!' , data: user })
+      return res.status(200).json({ message: 'User profile updated!' , data: user })
     else
-      return res.status(200).json({ message: 'Request user profile not found' })
+      return res.status(200).json({ message: 'Requested user profile not found' })
   }).catch(err => {
     next(err)
   })

@@ -1,7 +1,6 @@
 const router = require('express').Router()
 const { authVerify } = require('../controllers/auth')
 const { uploadImage } = require('../controllers/imageUpload')
-const { debuggerMid } = require('../controllers/misc')
 const { examAccessCheck, getExamList, getExamDetails, enrollExam, startExam, getExamQuestionGroups, getExamQuestions, getCurrentAnswers, updateCurrentAnswersS, updateCurrentAnswersP, submitAnswers } = require('../controllers/exam')
 
 router.get('/list', authVerify(), examAccessCheck({}), getExamList)
