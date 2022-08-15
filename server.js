@@ -1,21 +1,21 @@
-require('dotenv').config()
 const express = require('express')
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const routes = require('./routes')
-const { insertDb } = require('./db/db')
+const scheduler = require('./controllers/scheduler')
+const config = require('./config.json')
 
 const app = express()
 const PORT = 3001
 
-mongoose.connect(process.env.MONGO_URI, (err) => {
+mongoose.connect(config.MONGO_URI, (err) => {
   if (err)
     throw err
   console.log('Connected to MongoDB')
+  scheduler.scheduleDailyTask({ executeTaskFirstTime: true })
+  scheduler.dailyTaskToDo()
 })
-
-//insertDb()
 
 app.use(cookieParser())
 app.use(bodyParser.json())

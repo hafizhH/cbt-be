@@ -1,0 +1,8 @@
+{
+  "PROJECT_ROOT": "~/cbt/",
+  "GOOGLE_CLIENT_ID": "1050406267900-4lfi5cla10hglv7gdvk0a3amevtch0rk.apps.googleusercontent.com",
+  "GOOGLE_CLIENT_SECRET": "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",
+  "MONGO_URI": "mongodb+srv://cluster0.a1pkp.mongodb.net/?authMechanism=MONGODB-X509&authSource=%24external&tls=true&tlsCertificateKeyFile=./certs/X509-cert-4138607019808134008.pem",
+  "FRONTEND_URL": "http://localhost:3000",
+  "IMGBB_API_KEY": "79935ba7bf3c800c647c23f85eb54f4d"
+}

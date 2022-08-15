@@ -8,9 +8,13 @@ const ExamSchema = new mongoose.Schema(
     },
     subtitle: {
       type: 'String',
-      required: true
+      required: false
     },
     description: {
+      type: 'String',
+      required: true
+    },
+    instruction: {
       type: 'String',
       required: true
     },
@@ -28,6 +32,10 @@ const ExamSchema = new mongoose.Schema(
     },
     duration: {   //minutes
       type: 'Number',
+      required: true
+    },
+    result_announcement: {
+      type: 'Date',
       required: true
     },
     contestants: [{

@@ -20,27 +20,33 @@ const QuestionSchema = new mongoose.Schema(
       type: 'String',
       required: true
     },
-    question_constraint_details: {
+    question_constraints: {
       type: mongoose.Schema.Types.Mixed,
       required: false
     },
-    question_total_points: {
+    short_answer_points: {
       type: 'Number',
-      required: true
+      required: false
     },
-    short_answer_key : {
+    short_answer_key: {
       type: 'String',
       required: false
     }, 
-    code_test_case: [{
-      input: {
-        type: 'String',
+    code_subquestion: [{
+      code_subquestion_points: {
+        type: 'Number',
         required: true
       },
-      output: {
-        type: 'String',
-        required: true
-      }
+      code_test_case: [{
+        input: {
+          type: 'String',
+          required: true
+        },
+        output: {
+          type: 'String',
+          required: true
+        }
+      }]
     }]
   },
   {
@@ -49,4 +55,4 @@ const QuestionSchema = new mongoose.Schema(
   }
 )
 
-module.exports = mongoose.model('Question', QuestionSchema)
+module.exports = mongoose.model('Questions', QuestionSchema)

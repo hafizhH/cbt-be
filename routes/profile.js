@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const { uploadImage } = require('../controllers/imageUpload')
+const { uploadImage } = require('../controllers/upload')
 const { getProfile, updateProfile, getBasicProfile } = require('../controllers/profile')
 
 //Get basic profile info (email, name, photo, etc)

@@ -1,7 +1,8 @@
-require('dotenv').config()
+const config = require('../config.json')
 const axios = require('axios')
 const FormData = require('form-data')
 const multer = require('multer')
+
 const memoryStorage = multer.memoryStorage()
 
 //Upload to ImgBB
@@ -22,7 +23,7 @@ const uploadImage = (fields) => {
       Object.keys(req.files).forEach((field, index) => {
         try {
           let formData = new FormData()
-          formData.append('key', process.env.IMGBB_API_KEY)
+          formData.append('key', config.IMGBB_API_KEY)
           formData.append('image', Buffer.from(req.files[field][0].buffer).toString('base64'))
           axios.post('https://api.imgbb.com/1/upload', formData)
           .then(response => {
@@ -46,4 +47,30 @@ const uploadImage = (fields) => {
   }
 }
 
-module.exports = { uploadImage }
+
+const diskStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const { examId, questionId } = req.params
+    cb(null, '/code_submission/exam-' + examId + '/')
+  }, filename: (req, file, cb) => {
+    cb(null, Date.now() + '-' + questionId + '-' + file.originalName)
+  }
+})
+
+const uploadSourceCode = (fields) => {
+  const store = multer({ storage: diskStorage }).single(fields)
+  return (req, res, next) => {
+    store(req, res, (err) => {
+      if (err)
+        next(err)
+      res.locals.sourceCodeFileName = ''
+      //console.log(req.file)
+      if (req.file) {
+        res.locals.sourceCodeFileName = req.file.filename
+      }
+      next()
+    })
+  }
+}
+
+module.exports = { uploadImage, uploadSourceCode }

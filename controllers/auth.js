@@ -1,4 +1,4 @@
-require('dotenv').config()
+const config = require('../config.json')
 const passport = require('passport')
 const GoogleStrategy = require('passport-google-oauth20').Strategy
 const { v4: uuidv4 } = require('uuid')
@@ -7,8 +7,8 @@ const Sessions = require('../db/models/Sessions')
 
 const passportInit = () => {
   passport.use(new GoogleStrategy({
-    clientID: process.env.GOOGLE_CLIENT_ID,
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    clientID: config.GOOGLE_CLIENT_ID,
+    clientSecret: config.GOOGLE_CLIENT_SECRET,
     callbackURL: 'http://localhost:3001/auth/google/callback'
   }, (accessToken, refreshToken, profile, cb) => {
     //console.log(profile)
@@ -47,19 +47,19 @@ const authSignIn = (req, res, next) => {
   })
 }
 
-const authVerify = () => {
+const authVerify = ({ adminRequired = false }) => {
   return (req, res, next) => {
     const token = req.cookies.token
     if (!token)
-      return res.status(401).redirect(process.env.CLIENT_URL + '/signin')
+      return res.status(401).redirect(config.FRONTEND_URL + '/signin')
     Sessions.findOne({ token: token })
     .populate('user')
     .then((session) => {
-      if (session) {
+      if (session && (!adminRequired || session.user.isAdmin)) {
         res.locals.session = session
-        next()
+        return next()
       } else {
-        return res.status(401).redirect(process.env.CLIENT_URL + '/signin')
+        return res.status(401).redirect(config.FRONTEND_URL + '/signin')
         //return res.status(401).json({ message: 'Unauthorized access, please login again' })
       }
     }).catch(err => {
@@ -73,7 +73,7 @@ const authLogout = (req, res, next) => {
   Sessions.findOneAndDelete({ token: token })
   .then((session) => {
     res.clearCookie('token')
-    return res.status(200).redirect(process.env.CLIENT_URL + '/')
+    return res.status(200).redirect(config.FRONTEND_URL + '/')
   }).catch(err => {
     next(err)
   })

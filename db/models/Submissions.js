@@ -14,7 +14,7 @@ const SubmissionSchema = new mongoose.Schema(
     },
     status: {
       type: 'String',
-      enum: ['not started', 'in progress', 'finished-submitted', 'finished-unsubmitted'],
+      enum: ['not started', 'in progress', 'finished-submitted', 'finished-unsubmitted', 'graded'],
       required: true
     },
     started_at: {
@@ -25,10 +25,14 @@ const SubmissionSchema = new mongoose.Schema(
       type: 'Date',
       required: false
     },
+    final_score: {
+      type: 'Number',
+      required: false
+    },
     answers_data: [{
       group_status: {
         type: 'String',
-        enum: ['not started', 'in progress', 'finished-submitted', 'finished-unsubmitted'],
+        enum: ['not started', 'in progress', 'finished-submitted', 'finished-unsubmitted', 'graded'],
         required: true
       },
       group_answers: [{
@@ -45,7 +49,7 @@ const SubmissionSchema = new mongoose.Schema(
           type: 'String',
           required: false
         },
-        code_submission_id: {
+        code_submission_filename: {
           type: 'String',
           required: false
         },
@@ -54,6 +58,10 @@ const SubmissionSchema = new mongoose.Schema(
           required: false
         },
         grade_message: {
+          type: 'String',
+          required: false
+        },
+        grade_logs: {
           type: 'String',
           required: false
         }
