@@ -35,15 +35,15 @@ const authSignIn = (req, res, next) => {
       Sessions.findOneAndUpdate({ user: user._id }, { token: token, user: user._id, sessionData: {} }, { new: true, upsert: true })
       .then(session => {
         res.cookie('token', token, { maxAge: 10*60*60*1000, httpOnly: true })
-        return res.redirect('/dashboard')
+        return res.status(200).redirect(config.FRONTEND_URL + '/')
       }).catch(err => {
-        next(err)
+        return next(err)
       })
     } else {
       next(new Error('Created user data do not exist in database'))
     }
   }).catch(err => {
-    next(err)
+    return next(err)
   })
 }
 
@@ -51,7 +51,7 @@ const authVerify = ({ adminRequired = false }) => {
   return (req, res, next) => {
     const token = req.cookies.token
     if (!token)
-      return res.status(401).redirect(config.FRONTEND_URL + '/signin')
+      return res.status(401).redirect(config.FRONTEND_URL + '/401')
     Sessions.findOne({ token: token })
     .populate('user')
     .then((session) => {
@@ -59,7 +59,7 @@ const authVerify = ({ adminRequired = false }) => {
         res.locals.session = session
         return next()
       } else {
-        return res.status(401).redirect(config.FRONTEND_URL + '/signin')
+        return res.status(401).redirect(config.FRONTEND_URL + '/401')
         //return res.status(401).json({ message: 'Unauthorized access, please login again' })
       }
     }).catch(err => {
